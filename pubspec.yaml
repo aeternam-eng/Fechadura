@@ -3,12 +3,14 @@ description: Demonstrates how to use the flutter_blue plugin.
 publish_to: "none"
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.13.3 <3.0.0"
 
 dependencies:
-  flutter_blue: ^0.7.2
+  flutter_blue: ^0.8.0
   flutter:
     sdk: flutter
+  http: ^0.13.3
+  shared_preferences: ^2.0.6
 
 dev_dependencies:
   flutter_test:
