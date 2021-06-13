@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
+Guid serviceId = Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df');
 class DeviceScreen extends StatelessWidget {
   const DeviceScreen({Key? key, required this.device}) : super(key: key);
 
@@ -9,7 +10,7 @@ class DeviceScreen extends StatelessWidget {
   Future<void> _buildServiceTiles(List<BluetoothService> services) async {
     try{
       for(var s in services){
-        if(s.uuid == Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')){
+        if(s.uuid == serviceId){
           for(var c in s.characteristics ){
             await c.write([0x7f], withoutResponse: true);
           }
@@ -44,19 +45,18 @@ class DeviceScreen extends StatelessWidget {
                   text = 'CONNECT';
                   break;
                 default:
-                  //onPressed = null;
                   text = snapshot.data.toString().substring(21).toUpperCase();
                   break;
               }
               return TextButton(
-                  onPressed: onPressed,
-                  child: Text(
-                    text,
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .button!
-                        .copyWith(color: Colors.white),
-                  )
+                onPressed: onPressed,
+                child: Text(
+                  text,
+                  style: Theme.of(context)
+                    .primaryTextTheme
+                    .button!
+                    .copyWith(color: Colors.white),
+                )
               );
             },
           )

@@ -5,7 +5,6 @@ import 'package:flutter_blue_example/app/controllers/client.controller.dart';
 import 'package:flutter_blue_example/app/controllers/device.controller.dart';
 import 'package:flutter_blue_example/app/models/client.model.dart';
 import 'package:flutter_blue_example/app/models/device.model.dart';
-import 'package:flutter_blue_example/app/views/findDevices.view.dart';
 import 'package:flutter_blue_example/app/views/homepage.view.dart';
 import 'cadastro.view.dart';
 
@@ -26,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Fechadura Eletrôcina",
+          "Fechadura Eletrônica",
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
       ),
@@ -47,41 +46,40 @@ class _LoginPageState extends State<LoginPage> {
 
   _body(BuildContext context) {
     return Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _textFormField("Cpf/Cnpj", _tedLogin),
-            _textFormField("Senha", _tedSenha),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                containerButton(context, "Cadastrar", false),
-                containerButton(context, "Entrar", true)
-              ],
-            )
-          ],
-        ));
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          _textFormField("Cpf/Cnpj", _tedLogin),
+          _textFormField("Senha", _tedSenha),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              containerButton(context, "Cadastrar", false),
+              containerButton(context, "Entrar", true)
+            ],
+          )
+        ],
+      )
+    );
   }
 
   _textFormField(String field, TextEditingController controller) {
     return TextFormField(
-        // inputFormatters: new MaskTextInputFormatter(mask: ),
-        controller: controller,
-        obscureText: field == "Senha",
-        validator: (s) => _validaInput(s!, field),
-        keyboardType: TextInputType.text,
-        style: TextStyle(fontSize: 22, color: Theme.of(_context).primaryColor),
-        decoration: InputDecoration(
-            // contentPadding: const EdgeInsets.all(20.0),
-            border: OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(_context).primaryColor)),
-            labelText: field,
-            labelStyle: TextStyle(
-                fontSize: 22.0, color: Theme.of(_context).primaryColor),
-            hintText: "Informe o $field"));
+      controller: controller,
+      obscureText: field == "Senha",
+      validator: (s) => _validaInput(s!, field),
+      keyboardType: TextInputType.text,
+      style: TextStyle(fontSize: 22, color: Theme.of(_context).primaryColor),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(_context).primaryColor)),
+        labelText: field,
+        labelStyle: TextStyle(
+          fontSize: 22.0, color: Theme.of(_context).primaryColor),
+        hintText: "Informe o $field"));
   }
 
   Container containerButton(BuildContext context, String title, bool inLogin) {
@@ -90,16 +88,16 @@ class _LoginPageState extends State<LoginPage> {
       margin: EdgeInsets.only(top: 10.0),
       child: ElevatedButton(
         style:
-            ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor),
+          ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor),
         child: Text(title,
             style: TextStyle(
-                color: Theme.of(context).primaryColorDark, fontSize: 20.0)),
+              color: Theme.of(context).primaryColorDark, fontSize: 20.0)),
         onPressed: () {
           if (inLogin)
             _onClickLogin(context);
           else
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CadastroPage()));
+              MaterialPageRoute(builder: (context) => CadastroPage()));
         },
       ),
     );
@@ -148,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    HomePage(_client, _device), /*FindDevicesScreen()*/
+                  HomePage(_client, _device),
               ),
             );
           } catch (ex) {

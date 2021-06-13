@@ -87,10 +87,9 @@ class ScanResultTile extends StatelessWidget {
     return ExpansionTile(
       title: _buildTitle(context),
       leading: Text(result.rssi.toString()),
-      trailing: RaisedButton(
+      trailing: ElevatedButton(
         child: Text('CONNECT'),
-        color: Colors.black,
-        textColor: Colors.white,
+        style: ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor), 
         onPressed: (result.advertisementData.connectable) ? onTap : null,
       ),
       children: <Widget>[
@@ -102,8 +101,7 @@ class ScanResultTile extends StatelessWidget {
             context,
             'Manufacturer Data',
             getNiceManufacturerData(
-                    result.advertisementData.manufacturerData) ??
-                'N/A'),
+                    result.advertisementData.manufacturerData)),
         _buildAdvRow(
             context,
             'Service UUIDs',
@@ -111,7 +109,7 @@ class ScanResultTile extends StatelessWidget {
                 ? result.advertisementData.serviceUuids.join(', ').toUpperCase()
                 : 'N/A'),
         _buildAdvRow(context, 'Service Data',
-            getNiceServiceData(result.advertisementData.serviceData) ?? 'N/A'),
+            getNiceServiceData(result.advertisementData.serviceData)),
       ],
     );
   }

@@ -25,11 +25,12 @@ class CadastroPage extends StatelessWidget {
     _context = context;
     return Scaffold(
       appBar: AppBar(
-          iconTheme: IconThemeData(color: Theme.of(context).primaryColorDark),
-          title: Text(
-            "Cadastro",
-            style: TextStyle(color: Theme.of(context).primaryColorDark),
-          )),
+        iconTheme: IconThemeData(color: Theme.of(context).primaryColorDark),
+        title: Text(
+          "Cadastro",
+          style: TextStyle(color: Theme.of(context).primaryColorDark),
+        )
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: _body(context),
@@ -76,7 +77,7 @@ class CadastroPage extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(_context).primaryColor)),
+            borderSide: BorderSide(color: Theme.of(_context).primaryColor)),
           labelText: field,
           labelStyle: TextStyle(
             fontSize: 18,
@@ -111,10 +112,10 @@ class CadastroPage extends StatelessWidget {
       margin: EdgeInsets.only(top: 10.0),
       child: ElevatedButton(
         style:
-            ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor),
+          ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor),
         child: Text("Salvar",
-            style: TextStyle(
-                color: Theme.of(context).primaryColorDark, fontSize: 20.0)),
+          style: TextStyle(
+            color: Theme.of(context).primaryColorDark, fontSize: 20.0)),
         onPressed: () {
           _onClickCadastro(context);
         },
@@ -134,6 +135,7 @@ class CadastroPage extends StatelessWidget {
     } catch (e) {
       numTeste = null;
     }
+
     client = new Client(
         idClient: 0,
         nome: _nome.text,
@@ -146,42 +148,43 @@ class CadastroPage extends StatelessWidget {
         cep: _cep.text,
         cpfCnpj: _cpfCnpj.text,
         senha: _senha.text);
-    print(client.toJson());
+    
     if (validateEmpty(client, _confirmaSenha.text)) {
       _controllerClient.create(client);
       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(""),
-              content: Text("Cliente cadastrado com sucesso!"),
-              actions: <Widget>[
-                TextButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    })
-              ],
-            );
-          });
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(""),
+            content: Text("Cliente cadastrado com sucesso!"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+              )
+            ],
+          );
+        }
+      );
     } else {
       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Erro"),
-              content: Text("Dados inválidos!"),
-              actions: <Widget>[
-                TextButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }
-                )
-              ],
-            );
-          }
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Erro"),
+            content: Text("Dados inválidos!"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+              )
+            ],
+          );
+        }
       );
     }
   }

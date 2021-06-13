@@ -10,15 +10,18 @@ class FlutterBlueApp extends StatelessWidget {
     return MaterialApp(
       color: Colors.lightBlue,
       home: StreamBuilder<BluetoothState>(
-          stream: FlutterBlue.instance.state,
-          initialData: BluetoothState.unknown,
-          builder: (c, snapshot) {
-            final state = snapshot.data;
-            if (state == BluetoothState.on) {
-              return FindDevicesScreen();
-            }
-            return BluetoothOffScreen(state: state!);
-          }),
+        stream: FlutterBlue.instance.state,
+        initialData: BluetoothState.unknown,
+        builder: (c, snapshot) {
+          final state = snapshot.data;
+          
+          if (state == BluetoothState.on) {
+            return FindDevicesScreen();
+          }
+
+          return BluetoothOffScreen(state: state!);
+        }
+      ),
     );
   }
 }
@@ -35,7 +38,6 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.deepPurple,
         primaryColorDark: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        accentColor: Colors.purple,
         textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.blue),
       ),
       home: LoginPage(),
