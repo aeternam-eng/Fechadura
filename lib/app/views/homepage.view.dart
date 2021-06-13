@@ -3,12 +3,9 @@ import 'package:flutter_blue_example/app/controllers/client.controller.dart';
 import 'package:flutter_blue_example/app/controllers/device.controller.dart';
 import 'package:flutter_blue_example/app/models/client.model.dart';
 import 'package:flutter_blue_example/app/models/device.model.dart';
-import 'package:flutter_blue_example/app/views/cadastroDispositivo.view.dart';
 import 'package:flutter_blue_example/app/views/deviceScreen.view.dart';
 import 'package:flutter_blue_example/app/widgets/scan_result_tile.widget.dart';
-import 'package:path/path.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   Client _cliente = Client();
@@ -36,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   DateTime selectedDate = DateTime.now();
   Client _cliente = Client();
   List<Device> _listaDispositivo = [];
-
+  Guid _serviceId = Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df');
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<DevicePanelItem> list_panel = [];
 
@@ -45,16 +42,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    /*SharedPreferences.getInstance().then((value) {
-      final _firstTime = value.getBool('firstTime') ?? true;
-      if (_firstTime) {
-        _displayFirstDialog(context);
-        value.setBool('firstTime', false);
-      }
-    });
-
-    setState(() {
+    /*setState(() {
       list_panel = generateDevicePanelItem();
     });*/
   }
@@ -72,7 +60,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: RefreshIndicator(
         onRefresh: () =>
-            FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
+          FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -135,20 +123,19 @@ class _HomePageState extends State<HomePage> {
                 initialData: [],
                 builder: (c, snapshot) => Column(
                   children: snapshot.data!
-                      .map(
-                        (r) => ScanResultTile(
-                          result: r,
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                r.device.connect();
-                                return DeviceScreen(device: r.device);
-                              },
-                            ),
+                    .map(
+                      (r) => ScanResultTile(
+                        result: r,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              r.device.connect();
+                              return DeviceScreen(device: r.device);
+                            },
                           ),
                         ),
-                      )
-                      .toList(),
+                      ),
+                    ).toList(),
                 ),
               ),
             ],

@@ -19,8 +19,10 @@ class DeviceController {
     try {
       final deviceId = await repository.createDevice(clientId, nick);
 
-      Device device =
-          Device(idDevice: deviceId, nome: nick, criadoEm: DateTime.now());
+      Device device = Device(
+        idDevice: deviceId,
+        nome: nick,
+        criadoEm: DateTime.now());
 
       list.add(device);
     } catch (e) {

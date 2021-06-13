@@ -31,8 +31,6 @@ class CadastroDispositivo extends StatelessWidget {
   }
 
   _body(BuildContext context) {
-    print("cadastro");
-
     return Form(
       key: _formKey,
       child: Column(
@@ -46,8 +44,10 @@ class CadastroDispositivo extends StatelessWidget {
     );
   }
 
-  _editText(String field, TextEditingController controller, bool inSenha,
-      BuildContext context) {
+  _editText(String field,
+    TextEditingController controller,
+    bool inSenha,
+    BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
@@ -84,10 +84,10 @@ class CadastroDispositivo extends StatelessWidget {
       margin: EdgeInsets.only(top: 10.0),
       child: ElevatedButton(
         style:
-            ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor),
+          ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor),
         child: Text("Salvar",
-            style: TextStyle(
-                color: Theme.of(context).primaryColorDark, fontSize: 20.0)),
+          style: TextStyle(
+            color: Theme.of(context).primaryColorDark, fontSize: 20.0)),
         onPressed: () {
           _onClickCadastro(context);
         },
@@ -102,35 +102,38 @@ class CadastroDispositivo extends StatelessWidget {
     if (_controllerDevice.list.any((device) =>
         device.nome.trim().toUpperCase() == _nome.text.trim().toUpperCase())) {
       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(""),
-              content: Text("Dispositivo cadastrado com sucesso!"),
-              actions: <Widget>[
-                TextButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    })
-              ],
-            );
-          });
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(""),
+            content: Text("Dispositivo cadastrado com sucesso!"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+              )
+            ],
+          );
+        }
+      );
     } else {
       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(""),
-              content: Text("Não foi cadastrado seu arrombado!"),
-              actions: <Widget>[
-                TextButton(
-                    child: Text("BLZ"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    })
-              ],
-            );
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(""),
+            content: Text("Não foi cadastrado seu arrombado!"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("BLZ"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+              )
+            ],
+          );
         }
       );
     }

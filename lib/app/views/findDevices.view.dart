@@ -12,42 +12,41 @@ class FindDevicesScreen extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () =>
-            FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
+          FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               StreamBuilder<List<BluetoothDevice>>(
                 stream: Stream.periodic(Duration(seconds: 2))
-                    .asyncMap((_) => FlutterBlue.instance.connectedDevices),
+                  .asyncMap((_) => FlutterBlue.instance.connectedDevices),
                 initialData: [],
                 builder: (c, snapshot) => Column(
                   children: snapshot.data!
-                      .map(
-                        (d) => ListTile(
-                          title: Text(d.name),
-                          subtitle: Text(d.id.toString()),
-                          trailing: StreamBuilder<BluetoothDeviceState>(
-                            stream: d.state,
-                            initialData: BluetoothDeviceState.disconnected,
-                            builder: (c, snapshot) {
-                              if (snapshot.data ==
-                                  BluetoothDeviceState.connected) {
-                                return RaisedButton(
-                                  child: Text('OPEN'),
-                                  onPressed: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          DeviceScreen(device: d),
-                                    ),
+                    .map(
+                      (d) => ListTile(
+                        title: Text(d.name),
+                        subtitle: Text(d.id.toString()),
+                        trailing: StreamBuilder<BluetoothDeviceState>(
+                          stream: d.state,
+                          initialData: BluetoothDeviceState.disconnected,
+                          builder: (c, snapshot) {
+                            if (snapshot.data ==
+                                BluetoothDeviceState.connected) {
+                              return ElevatedButton(
+                                child: Text('OPEN'),
+                                onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DeviceScreen(device: d),
                                   ),
-                                );
-                              }
-                              return Text(snapshot.data.toString());
-                            },
-                          ),
+                                ),
+                              );
+                            }
+                            return Text(snapshot.data.toString());
+                          },
                         ),
-                      )
-                      .toList(),
+                      ),
+                    ).toList(),
                 ),
               ),
               StreamBuilder<List<ScanResult>>(
@@ -55,20 +54,19 @@ class FindDevicesScreen extends StatelessWidget {
                 initialData: [],
                 builder: (c, snapshot) => Column(
                   children: snapshot.data!
-                      .map(
-                        (r) => ScanResultTile(
-                          result: r,
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                r.device.connect();
-                                return DeviceScreen(device: r.device);
-                              },
-                            ),
+                    .map(
+                      (r) => ScanResultTile(
+                        result: r,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              r.device.connect();
+                              return DeviceScreen(device: r.device);
+                            },
                           ),
                         ),
-                      )
-                      .toList(),
+                      ),
+                    ).toList(),
                 ),
               ),
             ],

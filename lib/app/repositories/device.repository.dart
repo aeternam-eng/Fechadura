@@ -6,12 +6,12 @@ class DeviceRepository {
   Future<List<Device>> getByLogin(int? clientId) async {
     try {
       http.Response response = await http.get(Uri.parse(
-          "https://fechadura.azurewebsites.net/api/v1/Devices?clientId=$clientId"));
+        "https://fechadura.azurewebsites.net/api/v1/Devices?clientId=$clientId"));
 
       if (response.statusCode == 200) {
         return (jsonDecode(response.body) as List)
-            .map((x) => Device.fromJson(x))
-            .toList();
+          .map((x) => Device.fromJson(x))
+          .toList();
       }
 
       throw new Exception(jsonDecode(response.body));
@@ -27,9 +27,9 @@ class DeviceRepository {
       data['nick'] = nick;
 
       http.Response response = await http.post(
-          Uri.parse("https://fechadura.azurewebsites.net/api/v1/Devices/"),
-          body: jsonEncode(data),
-          headers: {"Content-Type": "application/json"});
+        Uri.parse("https://fechadura.azurewebsites.net/api/v1/Devices/"),
+        body: jsonEncode(data),
+        headers: {"Content-Type": "application/json"});
 
       if (response.statusCode == 201) {
         var temp = (jsonDecode(response.body));
@@ -38,7 +38,7 @@ class DeviceRepository {
       }
 
       throw new Exception(
-          "Erro ao tentar criar o dispositivo. ${jsonDecode(response.body)}");
+        "Erro ao tentar criar o dispositivo. ${jsonDecode(response.body)}");
     } catch (e) {
       return 0;
     }

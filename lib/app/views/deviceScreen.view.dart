@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
+Guid serviceId = Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df');
+
 class DeviceScreen extends StatelessWidget {
   const DeviceScreen({Key? key, required this.device}) : super(key: key);
 
@@ -41,7 +43,6 @@ class DeviceScreen extends StatelessWidget {
                   text = 'CONNECT';
                   break;
                 default:
-                  //onPressed = null;
                   text = snapshot.data.toString().substring(21).toUpperCase();
                   break;
               }

@@ -6,7 +6,7 @@ class ClientRepository {
   Future<Client> getByLogin(String cpf, String senha) async {
     try {
       http.Response response = await http.get(Uri.parse(
-          "https://fechadura.azurewebsites.net/api/v1/Client/$cpf/$senha"));
+        "https://fechadura.azurewebsites.net/api/v1/Client/$cpf/$senha"));
 
       if (response.statusCode == 200) {
         return (Client.fromJson(jsonDecode(response.body)));
@@ -21,9 +21,9 @@ class ClientRepository {
   Future<bool> create(Client client) async {
     try {
       http.Response response = await http.post(
-          Uri.parse("https://fechadura.azurewebsites.net/api/v1/Client/"),
-          body: jsonEncode(client.toJson()),
-          headers: {"Content-Type": "application/json"});
+        Uri.parse("https://fechadura.azurewebsites.net/api/v1/Client/"),
+        body: jsonEncode(client.toJson()),
+        headers: {"Content-Type": "application/json"});
 
       if (response.statusCode == 201) {
         return true;
