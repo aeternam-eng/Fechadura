@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_example/app/widgets/characteristic_tile.widget.dart';
+import 'package:flutter_blue_example/app/widgets/descriptor_tile.widget.dart';
+import 'package:flutter_blue_example/app/widgets/service_tile.widget.dart';
 
 class DeviceScreen extends StatelessWidget {
   const DeviceScreen({Key? key, required this.device}) : super(key: key);
 
   final BluetoothDevice device;
 
-  void _buildServiceTiles(List<BluetoothService> services) async {
-    var service = services.firstWhere((x) => x.uuid == Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df'));
-    
-    for(var c in service.characteristics ){
-      await c.write([0x7f], withoutResponse: true);
+  Future<void> _buildServiceTiles(List<BluetoothService> services) async {
+    for(var s in services){
+      if(s.uuid == Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')){
+        for(var c in s.characteristics ){
+          await c.write([0x7f], withoutResponse: true);
+          c.descriptors.forEach((x) {x.write([0x7f]);});
+        }
+      }
     }
   }
 
