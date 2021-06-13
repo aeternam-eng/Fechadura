@@ -77,55 +77,56 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: <Widget>[
               StreamBuilder<List<BluetoothDevice>>(
-                  stream:
-                      Stream.periodic(Duration(seconds: 2)).asyncMap((_) async {
-                    List<BluetoothDevice> returnDevices = [];
-
-                    List<BluetoothDevice> devices =
-                        await FlutterBlue.instance.connectedDevices;
-                    devices.map((device) async {
-                      await device.connect();
-                      final services = await device.discoverServices();
-
-                      for (BluetoothService service in services) {
-                        if (service.uuid ==
-                            Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')) {
-                          return device;
-                        } else {
-                          return null;
-                        }
-                      }
-                    });
-
-                    return returnDevices;
-                  }),
+                  stream: Stream.periodic(Duration(seconds: 2))
+                      .asyncMap((_) => FlutterBlue.instance.connectedDevices),
                   initialData: [],
                   builder: (c, snapshot) {
+                    List<BluetoothDevice> devices = snapshot.data!;
                     return Column(
-                      children: snapshot.data!.map((d) {
-                        return ListTile(
-                          title: Text(d.name),
-                          subtitle: Text(d.id.toString()),
-                          trailing: StreamBuilder<BluetoothDeviceState>(
-                            stream: d.state,
-                            initialData: BluetoothDeviceState.disconnected,
+                      children: devices.map((d) {
+                        // d.connect();
+                        // d.discoverServices();
+                        return StreamBuilder<List<BluetoothService>>(
+                            stream: d.services,
                             builder: (c, snapshot) {
-                              if (snapshot.data ==
-                                  BluetoothDeviceState.connected) {
-                                return ElevatedButton(
-                                  child: Text('OPEN'),
-                                  onPressed: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          DeviceScreen(device: d),
-                                    ),
-                                  ),
-                                );
+                              if (snapshot.hasData) {
+                                for (BluetoothService service
+                                    in snapshot.data!) {
+                                  if (service.uuid ==
+                                      Guid(
+                                          '9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')) {
+                                    return ListTile(
+                                      title: Text(d.name),
+                                      subtitle: Text(d.id.toString()),
+                                      trailing: StreamBuilder<
+                                              BluetoothDeviceState>(
+                                          stream: d.state,
+                                          initialData:
+                                              BluetoothDeviceState.disconnected,
+                                          builder: (c, snapshot) {
+                                            if (snapshot.data ==
+                                                BluetoothDeviceState
+                                                    .connected) {
+                                              return ElevatedButton(
+                                                child: Text('VIEW'),
+                                                onPressed: () =>
+                                                    Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DeviceScreen(device: d),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            return Text(
+                                                snapshot.data.toString());
+                                          }),
+                                    );
+                                  }
+                                }
                               }
-                              return Text(snapshot.data.toString());
-                            },
-                          ),
-                        );
+                              return Text('');
+                            });
                       }).toList(),
                     );
                   }),
@@ -168,7 +169,7 @@ class _HomePageState extends State<HomePage> {
             return FloatingActionButton(
               child: Icon(Icons.search),
               onPressed: () => FlutterBlue.instance.startScan(
-                withServices: [Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')],
+                //withServices: [Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')],
                 timeout: Duration(seconds: 4),
               ),
             );
