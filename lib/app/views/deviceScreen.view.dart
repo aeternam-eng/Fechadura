@@ -12,7 +12,6 @@ class DeviceScreen extends StatelessWidget {
         if(s.uuid == Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')){
           for(var c in s.characteristics ){
             await c.write([0x7f], withoutResponse: true);
-            c.descriptors.forEach((x) {x.write([0x7f]);});
           }
         }
       }
