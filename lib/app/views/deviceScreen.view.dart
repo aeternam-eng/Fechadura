@@ -22,6 +22,7 @@ class DeviceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    device.discoverServices();
     return Scaffold(
       appBar: AppBar(
         title: Text(device.name),
