@@ -1,7 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue/gen/flutterblue.pbjson.dart';
 import 'package:flutter_blue_example/app/widgets/characteristic_tile.widget.dart';
 import 'package:flutter_blue_example/app/widgets/descriptor_tile.widget.dart';
 import 'package:flutter_blue_example/app/widgets/service_tile.widget.dart';
@@ -11,39 +11,10 @@ class DeviceScreen extends StatelessWidget {
 
   final BluetoothDevice device;
 
-  List<Widget> _buildServiceTiles(List<BluetoothService> services) {
-    return services
-        .map(
-          (s) => ServiceTile(
-            service: s,
-            characteristicTiles: s.characteristics
-                .map(
-                  (c) => CharacteristicTile(
-                    characteristic: c,
-                    onReadPressed: () => c.read(),
-                    onWritePressed: () async {
-                      await c.write([0x7f], withoutResponse: true);
-                      await c.read();
-                    },
-                    onNotificationPressed: () async {
-                      await c.setNotifyValue(!c.isNotifying);
-                      await c.read();
-                    },
-                    descriptorTiles: c.descriptors
-                        .map(
-                          (d) => DescriptorTile(
-                            descriptor: d,
-                            onReadPressed: () => d.read(),
-                            onWritePressed: () => d.write([0x7f]),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                )
-                .toList(),
-          ),
-        )
-        .toList();
+  void _buildServiceTiles(BluetoothService services) async {
+    for(var c in services.characteristics ){
+      await c.write([0x7f], withoutResponse: true);
+    }
   }
 
   @override
@@ -80,7 +51,8 @@ class DeviceScreen extends StatelessWidget {
                         .primaryTextTheme
                         .button!
                         .copyWith(color: Colors.white),
-                  ));
+                  )
+              );
             },
           )
         ],
@@ -127,8 +99,13 @@ class DeviceScreen extends StatelessWidget {
               stream: device.services,
               initialData: [],
               builder: (c, snapshot) {
-                return Column(
-                  children: _buildServiceTiles(snapshot.data!),
+                return ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 20),
+                    onSurface: Colors.blue,
+                  ),
+                  onPressed: (){_buildServiceTiles(snapshot.data!.firstWhere((x) => x.uuid == Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')));},
+                  child: const Text("Abrir"),
                 );
               },
             ),
