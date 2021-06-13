@@ -11,16 +11,6 @@ class DeviceScreen extends StatelessWidget {
 
   final BluetoothDevice device;
 
-  List<int> _getRandomBytes() {
-    final math = Random();
-    return [
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255)
-    ];
-  }
-
   List<Widget> _buildServiceTiles(List<BluetoothService> services) {
     return services
         .map(
@@ -32,7 +22,7 @@ class DeviceScreen extends StatelessWidget {
                     characteristic: c,
                     onReadPressed: () => c.read(),
                     onWritePressed: () async {
-                      await c.write(_getRandomBytes(), withoutResponse: true);
+                      await c.write([0x7f], withoutResponse: true);
                       await c.read();
                     },
                     onNotificationPressed: () async {
@@ -44,7 +34,7 @@ class DeviceScreen extends StatelessWidget {
                           (d) => DescriptorTile(
                             descriptor: d,
                             onReadPressed: () => d.read(),
-                            onWritePressed: () => d.write(_getRandomBytes()),
+                            onWritePressed: () => d.write([0x7f]),
                           ),
                         )
                         .toList(),
@@ -82,7 +72,7 @@ class DeviceScreen extends StatelessWidget {
                   text = snapshot.data.toString().substring(21).toUpperCase();
                   break;
               }
-              return FlatButton(
+              return TextButton(
                   onPressed: onPressed,
                   child: Text(
                     text,
@@ -133,18 +123,6 @@ class DeviceScreen extends StatelessWidget {
                 ),
               ),
             ),
-            /*StreamBuilder<int>(
-              stream: device.mtu,
-              initialData: 0,
-              builder: (c, snapshot) => ListTile(
-                title: Text('MTU Size'),
-                subtitle: Text('${snapshot.data} bytes'),
-                trailing: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => device.requestMtu(223),
-                ),
-              ),
-            ),
             StreamBuilder<List<BluetoothService>>(
               stream: device.services,
               initialData: [],
@@ -153,7 +131,7 @@ class DeviceScreen extends StatelessWidget {
                   children: _buildServiceTiles(snapshot.data!),
                 );
               },
-            ),*/
+            ),
           ],
         ),
       ),

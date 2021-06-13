@@ -177,10 +177,12 @@ class CadastroPage extends StatelessWidget {
                     child: Text("OK"),
                     onPressed: () {
                       Navigator.of(context).pop();
-                    })
+                    }
+                )
               ],
             );
-          });
+          }
+      );
     }
   }
 }

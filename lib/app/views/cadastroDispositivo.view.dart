@@ -112,7 +112,6 @@ class CadastroDispositivo extends StatelessWidget {
                     child: Text("OK"),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      Navigator.of(context).pop();
                     })
               ],
             );
@@ -129,11 +128,11 @@ class CadastroDispositivo extends StatelessWidget {
                     child: Text("BLZ"),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      Navigator.of(context).pop();
                     })
               ],
             );
-          });
+        }
+      );
     }
   }
 }
