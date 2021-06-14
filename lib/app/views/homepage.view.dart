@@ -60,43 +60,18 @@ class _HomePageState extends State<HomePage> {
       ),
       body: RefreshIndicator(
         onRefresh: () =>
-          FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
+            FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               StreamBuilder<List<BluetoothDevice>>(
-<<<<<<< Updated upstream
                   stream: Stream.periodic(Duration(seconds: 2))
                       .asyncMap((_) => FlutterBlue.instance.connectedDevices),
-=======
-                  stream:
-                    Stream.periodic(Duration(seconds: 2)).asyncMap((_) async {
-                      List<BluetoothDevice> returnDevices = [];
-                      List<BluetoothDevice> devices =
-                        await FlutterBlue.instance.connectedDevices;
-                      devices.map((device) async {
-                        await device.connect();
-                        final services = await device.discoverServices();
-
-                        for (BluetoothService service in services) {
-                          if (service.uuid == _serviceId) {
-                            return device;
-                          } else {
-                            return null;
-                          }
-                        }
-                      });
-
-                      return returnDevices;
-                    }),
->>>>>>> Stashed changes
                   initialData: [],
                   builder: (c, snapshot) {
                     List<BluetoothDevice> devices = snapshot.data!;
                     return Column(
                       children: devices.map((d) {
-                        // d.connect();
-                        // d.discoverServices();
                         return StreamBuilder<List<BluetoothService>>(
                             stream: d.services,
                             builder: (c, snapshot) {
@@ -146,19 +121,20 @@ class _HomePageState extends State<HomePage> {
                 initialData: [],
                 builder: (c, snapshot) => Column(
                   children: snapshot.data!
-                    .map(
-                      (r) => ScanResultTile(
-                        result: r,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              r.device.connect();
-                              return DeviceScreen(device: r.device);
-                            },
+                      .map(
+                        (r) => ScanResultTile(
+                          result: r,
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                r.device.connect();
+                                return DeviceScreen(device: r.device);
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ).toList(),
+                      )
+                      .toList(),
                 ),
               ),
             ],
@@ -193,9 +169,9 @@ class _HomePageState extends State<HomePage> {
     return List.generate(
       _listaDispositivo.length,
       (index) => DevicePanelItem(
-        headerValue: _listaDispositivo[index].nome,
-        isExpanded: false,
-        item: _listaDispositivo[index]),
+          headerValue: _listaDispositivo[index].nome,
+          isExpanded: false,
+          item: _listaDispositivo[index]),
     );
   }
 
