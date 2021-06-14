@@ -142,6 +142,15 @@ class _HomePageState extends State<HomePage> {
                           MaterialPageRoute(
                             builder: (context) =>
                               CadastroDispositivo(_cliente, _listaDispositivo, r.device.id.toString())))
+                              .whenComplete(() => {
+                                _deviceController.getByLogin(_cliente.idClient).then(
+                                  (value) => setState(
+                                    () {
+                                      _listaDispositivo = _deviceController.list;
+                                    },
+                                  ),
+                                ),
+                              })
                       }}
                     ),
                   ).toList(),
