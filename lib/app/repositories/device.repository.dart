@@ -25,7 +25,7 @@ class DeviceRepository {
       final Map<String, dynamic> data = new Map<String, dynamic>();
       data['clientId'] = clientId;
       data['nick'] = nick;
-      data['bluetooth'] = bluetoothId;
+      data['bluetoothId'] = bluetoothId;
 
       http.Response response = await http.post(
         Uri.parse("https://fechadura.azurewebsites.net/api/v1/Devices/"),
