@@ -15,14 +15,15 @@ class DeviceController {
     }
   }
 
-  Future<void> create(String nick, int? clientId) async {
+  Future<void> create(String nick, int? clientId, String bluetoothId) async {
     try {
-      final deviceId = await repository.createDevice(clientId, nick);
+      final deviceId = await repository.createDevice(clientId, nick, bluetoothId);
 
       Device device = Device(
         idDevice: deviceId,
         nome: nick,
-        criadoEm: DateTime.now());
+        criadoEm: DateTime.now(),
+        bluetoothId: bluetoothId);
 
       list.add(device);
     } catch (e) {

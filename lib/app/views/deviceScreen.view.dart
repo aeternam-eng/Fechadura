@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_example/app/models/device.model.dart';
 
 Guid serviceId = Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df');
+
+class DevicePanelItem {
+  String headerValue;
+  bool isExpanded;
+  Device item;
+
+  DevicePanelItem(
+      {required this.headerValue, this.isExpanded = false, required this.item});
+}
+
 
 class DeviceScreen extends StatelessWidget {
   const DeviceScreen({Key? key, required this.device}) : super(key: key);
@@ -46,6 +57,7 @@ class DeviceScreen extends StatelessWidget {
                   text = snapshot.data.toString().substring(21).toUpperCase();
                   break;
               }
+
               return TextButton(
                 onPressed: onPressed,
                 child: Text(

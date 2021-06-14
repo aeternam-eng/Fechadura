@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_blue_example/app/controllers/device.controller.dart';
 import 'package:flutter_blue_example/app/models/client.model.dart';
 import 'package:flutter_blue_example/app/models/device.model.dart';
@@ -10,11 +11,14 @@ class CadastroDispositivo extends StatelessWidget {
   final _controllerDevice = DeviceController();
   Client _client = Client();
   List<Device> _devices = List.empty();
-
-  CadastroDispositivo(this._client, this._devices);
+  final BluetoothDevice _bluetoothDevice;
+  
+  CadastroDispositivo(this._client, this._devices, this._bluetoothDevice);
 
   @override
   Widget build(BuildContext context) {
+    _bluetoothDevice.discoverServices();
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Theme.of(context).primaryColorDark),
@@ -96,7 +100,7 @@ class CadastroDispositivo extends StatelessWidget {
   }
 
   _onClickCadastro(BuildContext context) async {
-    await _controllerDevice.create(_nome.text, _client.idClient);
+    await _controllerDevice.create(_nome.text, _client.idClient,_bluetoothDevice.id.toString());
     await _controllerDevice.getByLogin(_client.idClient);
 
     if (_controllerDevice.list.any((device) =>

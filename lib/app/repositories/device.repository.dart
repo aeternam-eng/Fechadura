@@ -20,11 +20,12 @@ class DeviceRepository {
     }
   }
 
-  Future<int> createDevice(int? clientId, String nick) async {
+  Future<int> createDevice(int? clientId, String nick, String bluetoothId) async {
     try {
       final Map<String, dynamic> data = new Map<String, dynamic>();
       data['clientId'] = clientId;
       data['nick'] = nick;
+      data['bluetooth'] = bluetoothId;
 
       http.Response response = await http.post(
         Uri.parse("https://fechadura.azurewebsites.net/api/v1/Devices/"),

@@ -42,9 +42,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    /*setState(() {
+    setState(() {
       list_panel = generateDevicePanelItem();
-    });*/
+    });
   }
 
   @override
@@ -65,8 +65,31 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: <Widget>[
               StreamBuilder<List<BluetoothDevice>>(
+<<<<<<< Updated upstream
                   stream: Stream.periodic(Duration(seconds: 2))
                       .asyncMap((_) => FlutterBlue.instance.connectedDevices),
+=======
+                  stream:
+                    Stream.periodic(Duration(seconds: 2)).asyncMap((_) async {
+                      List<BluetoothDevice> returnDevices = [];
+                      List<BluetoothDevice> devices =
+                        await FlutterBlue.instance.connectedDevices;
+                      devices.map((device) async {
+                        await device.connect();
+                        final services = await device.discoverServices();
+
+                        for (BluetoothService service in services) {
+                          if (service.uuid == _serviceId) {
+                            return device;
+                          } else {
+                            return null;
+                          }
+                        }
+                      });
+
+                      return returnDevices;
+                    }),
+>>>>>>> Stashed changes
                   initialData: [],
                   builder: (c, snapshot) {
                     List<BluetoothDevice> devices = snapshot.data!;
@@ -166,6 +189,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  List<DevicePanelItem> generateDevicePanelItem() {
+    return List.generate(
+      _listaDispositivo.length,
+      (index) => DevicePanelItem(
+        headerValue: _listaDispositivo[index].nome,
+        isExpanded: false,
+        item: _listaDispositivo[index]),
+    );
+  }
+
   /*floatingActionButton: FloatingActionButton(
           onPressed: () {
           Navigator.push(
@@ -190,15 +223,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.purple,
           ),*/
 
-  /*List<DevicePanelItem> generateDevicePanelItem() {
-    return List.generate(
-      _listaDispositivo.length,
-      (index) => DevicePanelItem(
-          headerValue: _listaDispositivo[index].nome,
-          isExpanded: false,
-          item: _listaDispositivo[index]),
-    );
-  }
+  /*
 
   Widget _buildDevicePanel(BuildContext context) {
     return ExpansionPanelList(
