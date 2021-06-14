@@ -7,6 +7,8 @@ import 'package:flutter_blue_example/app/views/deviceScreen.view.dart';
 import 'package:flutter_blue_example/app/widgets/scan_result_tile.widget.dart';
 import 'package:flutter/material.dart';
 
+import 'cadastroDispositivo.view.dart';
+
 class HomePage extends StatefulWidget {
   Client _cliente = Client();
   List<Device> _listaDispositivo = [];
@@ -35,16 +37,18 @@ class _HomePageState extends State<HomePage> {
   List<Device> _listaDispositivo = [];
   Guid _serviceId = Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df');
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  List<DevicePanelItem> list_panel = [];
+  // List<DevicePanelItem> list_panel = [];
 
   _HomePageState(this._cliente, this._listaDispositivo);
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      list_panel = generateDevicePanelItem();
-    });
+    _deviceController.getByLogin(_cliente.idClient).then((dx) {_listaDispositivo = _deviceController.list;} );
+
+    // setState(() {
+    //   list_panel = generateDevicePanelItem();
+    // });
   }
 
   @override
@@ -60,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: RefreshIndicator(
         onRefresh: () =>
-            FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
+          FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -78,9 +82,7 @@ class _HomePageState extends State<HomePage> {
                               if (snapshot.hasData) {
                                 for (BluetoothService service
                                     in snapshot.data!) {
-                                  if (service.uuid ==
-                                      Guid(
-                                          '9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')) {
+                                  if (service.uuid == _serviceId) {
                                     return ListTile(
                                       title: Text(d.name),
                                       subtitle: Text(d.id.toString()),
@@ -115,26 +117,34 @@ class _HomePageState extends State<HomePage> {
                             });
                       }).toList(),
                     );
-                  }),
+                  }
+                ),
               StreamBuilder<List<ScanResult>>(
                 stream: FlutterBlue.instance.scanResults,
                 initialData: [],
                 builder: (c, snapshot) => Column(
                   children: snapshot.data!
-                      .map(
-                        (r) => ScanResultTile(
-                          result: r,
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                r.device.connect();
-                                return DeviceScreen(device: r.device);
-                              },
-                            ),
-                          ),
+                    .map(
+                    (r) => ScanResultTile(
+                      result: r,
+                      onTap: () => {if(_listaDispositivo.any((x) => x.bluetoothId == r.device.id.toString())){
+                        Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            r.device.connect();
+                            
+                            return DeviceScreen(device: r.device);
+                          },
                         ),
-                      )
-                      .toList(),
+                      ),} else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                              CadastroDispositivo(_cliente, _listaDispositivo, r.device.id.toString())))
+                      }}
+                    ),
+                  ).toList(),
                 ),
               ),
             ],
@@ -155,7 +165,6 @@ class _HomePageState extends State<HomePage> {
             return FloatingActionButton(
               child: Icon(Icons.search),
               onPressed: () => FlutterBlue.instance.startScan(
-                //withServices: [Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')],
                 timeout: Duration(seconds: 4),
               ),
             );
@@ -165,15 +174,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<DevicePanelItem> generateDevicePanelItem() {
-    return List.generate(
-      _listaDispositivo.length,
-      (index) => DevicePanelItem(
-          headerValue: _listaDispositivo[index].nome,
-          isExpanded: false,
-          item: _listaDispositivo[index]),
-    );
-  }
+  // List<DevicePanelItem> generateDevicePanelItem() {
+  //   return List.generate(
+  //     _listaDispositivo.length,
+  //     (index) => DevicePanelItem(
+  //       headerValue: _listaDispositivo[index].nome,
+  //       isExpanded: false,
+  //       item: _listaDispositivo[index]),
+  //   );
+  // }
 
   /*floatingActionButton: FloatingActionButton(
           onPressed: () {

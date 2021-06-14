@@ -11,14 +11,12 @@ class CadastroDispositivo extends StatelessWidget {
   final _controllerDevice = DeviceController();
   Client _client = Client();
   List<Device> _devices = List.empty();
-  final BluetoothDevice _bluetoothDevice;
+  final String _bluetoothId;
   
-  CadastroDispositivo(this._client, this._devices, this._bluetoothDevice);
+  CadastroDispositivo(this._client, this._devices, this._bluetoothId);
 
   @override
   Widget build(BuildContext context) {
-    _bluetoothDevice.discoverServices();
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Theme.of(context).primaryColorDark),
@@ -100,7 +98,7 @@ class CadastroDispositivo extends StatelessWidget {
   }
 
   _onClickCadastro(BuildContext context) async {
-    await _controllerDevice.create(_nome.text, _client.idClient,_bluetoothDevice.id.toString());
+    await _controllerDevice.create(_nome.text, _client.idClient,_bluetoothId);
     await _controllerDevice.getByLogin(_client.idClient);
 
     if (_controllerDevice.list.any((device) =>

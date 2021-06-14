@@ -21,7 +21,7 @@ class DeviceScreen extends StatelessWidget {
 
   Future<void> _sendOpenLock(List<BluetoothService> services) async {
     for (var s in services) {
-      if (s.uuid == Guid('9e98d7aF-d2f9-42f5-acd2-bcb5a5cdc7df')) {
+      if (s.uuid == serviceId) {
         for (var c in s.characteristics) {
           var value = await c.read();
           if (value[0] == 0xFF) {
